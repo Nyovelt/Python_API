@@ -1,5 +1,23 @@
 <template>
   <v-container>
+    <div class="text-center">
+      <v-dialog v-model="dialog" width="500">
+        <v-card>
+          <v-card-title class="text-h5 grey lighten-2">
+            Our suggestion
+          </v-card-title>
+
+          <v-card-text> {{ message }} </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialog = false"> I see </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -11,62 +29,31 @@
       </v-col>
 
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Welcome to Vuetify</h1>
+        <h1 class="display-2 font-weight-bold mb-3">Welcome to XXX系统</h1>
 
         <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br />please join our online
+          你可以怎么怎么怎么样
+          <br />
           <a href="https://community.vuetifyjs.com" target="_blank"
-            >Discord Community</a
+            >这是我们的链接</a
           >
         </p>
       </v-col>
 
       <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
-
         <v-row justify="center">
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-row>
+          <div>
+            <v-text-field
+              label="告诉我们你的信息吧"
+              hide-details="auto"
+              v-model="text"
+            ></v-text-field></div
+        ></v-row>
       </v-col>
 
       <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
-
         <v-row justify="center">
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-row>
-      </v-col>
-
-      <v-col class="mb-5" cols="12">
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
-
-        <v-row justify="center">
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
+          <v-btn @click="submit" color="info" outlined> Okay </v-btn>
         </v-row>
       </v-col>
     </v-row>
@@ -77,6 +64,24 @@
 export default {
   name: "HelloWorld",
 
-  data: () => ({}),
+  data: () => ({ dialog: false, text: "", message: "Connection ERR" }),
+
+  methods: {
+    submit() {
+      this.axios
+        .post("/foo", {
+          submit: this.text,
+        })
+        .then((res) => {
+          this.message = res.data;
+          this.dialog = true;
+        })
+        .catch(function (err) {
+          console.log(err);
+          this.message = err;
+          this.dialog = true;
+        });
+    },
+  },
 };
 </script>
